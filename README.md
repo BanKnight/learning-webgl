@@ -27,5 +27,11 @@ npm run build
 npm run lint
 ```
 
+### 查看例子效果
+修改 App.vue 为对应例子，然后查看效果即可
+```javascript
+import example from "./example-07";
+```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
