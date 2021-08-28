@@ -6,11 +6,11 @@
 
 <script>
 
-import example from "./example-07";
+import example from "./example-09";
 
 export default {
   name: "App",
-  mounted() {
+  async mounted() {
     const canvas = this.$refs.canvas;
 
     const gl = canvas.getContext("webgl2");
@@ -20,13 +20,15 @@ export default {
       return;
     }
 
-    const draw_example = example(gl, 640, 480);
+    gl.enable(gl.DEPTH_TEST);
+
+    const draw_example = await example(gl, 640, 480);
 
     let last = 0;
 
     const draw = (total) => {
       gl.clearColor(0.2, 0.3, 0.3, 1.0);
-      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
       draw_example(total - last, total);
 

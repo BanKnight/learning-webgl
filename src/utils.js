@@ -1,4 +1,4 @@
-exports.load_shader = function(gl,sources)
+exports.load_shader = function (gl, sources)
 {
     const shader = {
         program: load_program(gl, sources.vs, sources.fs),
@@ -31,6 +31,35 @@ exports.load_shader = function(gl,sources)
     return shader
 }
 
+exports.load_images = function (urls)
+{
+    return new Promise((resolve) =>
+    {
+        const images = []
+        let done = 0
+        for (const url of urls)
+        {
+            const img = new Image()
+
+            img.src = url
+            img.onload = () =>
+            {
+                done++
+                if (done == images.length)
+                {
+                    resolve(images)
+                }
+            }
+            images.push(img)
+        }
+    })
+}
+
+exports.radians = function(angle)
+{
+    return angle / 180 * Math.PI
+}
+
 function load_program(gl, vsSource, fsSource)
 {
     const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
@@ -38,7 +67,7 @@ function load_program(gl, vsSource, fsSource)
 
     // 创建着色器程序
     const shaderProgram = gl.createProgram();
-    
+
     gl.attachShader(shaderProgram, vertexShader);
     gl.attachShader(shaderProgram, fragmentShader);
     gl.linkProgram(shaderProgram);
