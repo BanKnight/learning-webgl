@@ -13,7 +13,7 @@ import example from "./example-07";
 + example-05：演示多个颜色组成的三角形
 + example-06：演示使用纹理
 + example-07：演示通过矩阵的动态旋转效果
-+ example-08：演示通过mvp矩阵，将图片表现得好像放在地板上一样
++ example-08：演示通过mvp矩阵，地板上的图片
 + example-09：演示一个旋转中的正六面体
 
 ## 使用到的库

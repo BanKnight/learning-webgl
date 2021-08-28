@@ -6,7 +6,7 @@
 
 <script>
 
-import example from "./example-09";
+import example from "./example-06";
 
 export default {
   name: "App",

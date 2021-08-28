@@ -1,7 +1,7 @@
 import utils from "../utils"
 import shader from "./shader"
 
-export default function (gl)
+export default async function (gl)
 {
     const simple_shader = utils.load_shader(gl,shader)
 
@@ -76,46 +76,24 @@ export default function (gl)
 
     // gl.bindVertexArray(0);
 
-    function load_textures(urls,on_completed)
-    {
-        const images = []
-        let done = 0
-        for(const url of urls)
-        {
-            const img = new Image()
-
-            img.src = url
-            img.onload = ()=>
-            {
-                done++
-                if(done == images.length)
-                {
-                    on_completed(images)
-                }
-            }
-            images.push(img)
-        }
-    }
-
+    const images = await utils.load_images(["container.jpg", "awesomeface.png"])
     const textures = []
-
-    load_textures(["container.jpg","awesomeface.png"],(images)=>
     {
-        for(let i = 0;i < images.length;++i)
+        for (let i = 0; i < images.length; ++i)
         {
             const texture = gl.createTexture();
             gl.bindTexture(gl.TEXTURE_2D, texture);
-    
+
             // Set the parameters so we can render any size image.
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-    
+
             // Upload the image into the texture.
             gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);      //表示将t轴反过来
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[i]);
-    
+
             gl.generateMipmap(gl.TEXTURE_2D);
 
             textures.push(texture)
@@ -127,7 +105,7 @@ export default function (gl)
         gl.uniform1i(simple_shader.uniforms.texture1.location, 0);
         gl.uniform1i(simple_shader.uniforms.texture2.location, 1);
 
-    })
+    }
 
     return () =>
     {
