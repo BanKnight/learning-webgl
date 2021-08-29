@@ -15,6 +15,8 @@ import example from "./example-07";
 + example-07：演示通过矩阵的动态旋转效果
 + example-08：演示通过mvp矩阵，地板上的图片
 + example-09：演示一个旋转中的正六面体
++ example-10：演示围绕原点旋转的摄像头表现
++ example-11：演示使用键盘控制摄像头移动
 
 ## 使用到的库
 + [glMatrix 矩阵运算](https://github.com/toji/gl-matrix)

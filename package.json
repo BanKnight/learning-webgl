@@ -33,8 +33,7 @@
       "parser": "babel-eslint"
     },
     "globals":{
-      "glMatrix":"readonly",
-      "requestAnimationrame":"readonly"
+      "glMatrix":"readonly"
     },
     "rules": {}
   },
