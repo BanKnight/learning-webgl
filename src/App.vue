@@ -5,18 +5,17 @@
 </template>
 
 <script>
-import example from "./example-11";
+import example from "./example-12";
 
 export default {
   name: "App",
   async mounted() {
     const canvas = this.$refs.canvas;
     let inputs = {
-      keyup: {},
-      keydown: {},
-      mouseup: {},
-      mousedown: {},
-      mousewhell: null,
+      keys:{},
+      mouses:{},
+      event:null,
+      scroll:0,
     };
 
     const gl = canvas.getContext("webgl2");
@@ -27,49 +26,58 @@ export default {
     }
 
     canvas.addEventListener("keydown", (e) => {
-      inputs.keydown[e.key] = true;
-      inputs.ctrl = e.ctrlKey
-      inputs.alt = e.altlKey
-      inputs.shift = e.shiftKey
 
+      inputs.keys[e.key] = true;
       inputs.event = e;
+
+      inputs.ctrl = e.ctrlKey;
+      inputs.alt = e.altlKey;
+      inputs.shift = e.shiftKey;
+
     });
 
     canvas.addEventListener("keyup", (e) => {
-      inputs.keyup[e.key];
-      inputs.ctrl = e.ctrlKey
-      inputs.alt = e.altlKey
-      inputs.shift = e.shiftKey
-
+      inputs.keys[e.key] = false;
       inputs.event = e;
+
+      inputs.ctrl = e.ctrlKey;
+      inputs.alt = e.altlKey;
+      inputs.shift = e.shiftKey;
+
     });
 
     canvas.addEventListener("mousedown", (e) => {
-      inputs.mousedown.button = e.button;
-      inputs.ctrl = e.ctrlKey
-      inputs.alt = e.altlKey
-      inputs.shift = e.shiftKey
+
+      inputs.mouses[e.button] = true
 
       inputs.event = e;
+
+      inputs.ctrl = e.ctrlKey;
+      inputs.alt = e.altlKey;
+      inputs.shift = e.shiftKey;  
+
     });
 
     canvas.addEventListener("mouseup", (e) => {
-      inputs.mouseup.button = e.button;
-      inputs.ctrl = e.ctrlKey
-      inputs.alt = e.altlKey
-      inputs.shift = e.shiftKey
-      
+
+      inputs.mouses[e.button] = false
+      inputs.event = e;
+
+      inputs.ctrl = e.ctrlKey;
+      inputs.alt = e.altlKey;
+      inputs.shift = e.shiftKey;
+    });
+
+    canvas.addEventListener("mousemove", (e) => {
       inputs.event = e;
     });
 
-    canvas.focus()
-
     canvas.addEventListener(
-      "mousewhell",
+      "DOMMouseScroll",
       (e) => {
         e.preventDefault();
 
-        inputs.mousewhell = Math.max(
+        inputs.scroll = Math.max(
           -1,
           Math.min(1, e.wheelDelta || -e.detail)
         );
@@ -77,13 +85,15 @@ export default {
       false
     );
 
+    canvas.focus();
+
     gl.enable(gl.DEPTH_TEST);
 
     const draw_example = await example(gl, 640, 480);
 
     let last = 0;
-    function draw(total) {
-
+    function draw(total) 
+    {
       gl.clearColor(0.2, 0.3, 0.3, 1.0);
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -91,15 +101,9 @@ export default {
 
       last = total;
 
-      inputs = {
-        keyup: {},
-        keydown: {},
-        mouseup: {},
-        mousedown: {},
-        mousewhell: null,
-      };
-
       requestAnimationFrame(draw);
+
+      inputs.scroll = 0
     }
 
     requestAnimationFrame(draw);

@@ -17,6 +17,7 @@ import example from "./example-07";
 + example-09：演示一个旋转中的正六面体
 + example-10：演示围绕原点旋转的摄像头表现
 + example-11：演示使用键盘控制摄像头移动
++ example-12：演示使用鼠标控制摄像头旋转
 
 ## 使用到的库
 + [glMatrix 矩阵运算](https://github.com/toji/gl-matrix)
