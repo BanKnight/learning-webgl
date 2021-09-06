@@ -185,7 +185,7 @@ export default async function (gl, width, height)
                 const xoffset = event.x - last_mouse.x
                 const yoffset = last_mouse.y - event.y
 
-                if (xoffset != 0 && yoffset != 0)
+                if (xoffset != 0 || yoffset != 0)
                 {
                     yaw += xoffset * sensitivity
                     pitch += yoffset * sensitivity
@@ -250,8 +250,8 @@ export default async function (gl, width, height)
 
         if (inputs.scroll)
         {
-            if (fov >= 1.0 && fov <= 45.0)
-                fov -= inputs.scroll;
+            fov -= inputs.scroll;
+
             if (fov <= 1.0)
                 fov = 1.0;
             if (fov >= 45.0)
