@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import example from "./example-12";
+import example from "./example-11";
 
 export default {
   name: "App",
@@ -13,6 +13,7 @@ export default {
     const canvas = this.$refs.canvas;
     let inputs = {
       keys: {},
+      codes:{},
       mouses: {},
       event: null,
       scroll: 0,
@@ -26,7 +27,8 @@ export default {
     }
 
     canvas.addEventListener("keydown", (e) => {
-      inputs.keys[e.key] = true;
+      inputs.keys[e.keyCode] = true;
+      inputs.codes[e.code] = true
       inputs.event = e;
 
       inputs.ctrl = e.ctrlKey;
@@ -35,7 +37,9 @@ export default {
     });
 
     canvas.addEventListener("keyup", (e) => {
-      inputs.keys[e.key] = false;
+      inputs.keys[e.keyCode] = false;
+      inputs.codes[e.code] = false
+
       inputs.event = e;
 
       inputs.ctrl = e.ctrlKey;
@@ -76,14 +80,27 @@ export default {
       false
     );
 
-    function full_screen() {
-      canvas.width = document.documentElement.clientWidth
-      canvas.height = document.documentElement.clientHeight-1
+    const context = {
+      canvas,
+      gl,
+      now:performance.now(),
+      width:0,
+      height:0,
+      inputs
+    }
 
-      gl.viewport(0, 0, canvas.width, canvas.height);
+    function full_screen() {
+      context.width = document.documentElement.clientWidth
+      context.height = document.documentElement.clientHeight-1
+
+      gl.viewport(0, 0, context.width, context.height);
+
+      canvas.width = context.width
+      canvas.height = context.height
 
     }
 
+    window.onresize = full_screen
 
     canvas.focus();
 
@@ -91,15 +108,18 @@ export default {
 
     gl.enable(gl.DEPTH_TEST);
 
+    const draw_example = await example(context);
 
-    const draw_example = await example(gl, canvas.width, canvas.height);
+    let last = context.now;
 
-    let last = 0;
     function draw(total) {
+
       gl.clearColor(0.2, 0.3, 0.3, 1.0);
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-      draw_example(total - last, total, inputs);
+      context.now = total
+
+      draw_example(total - last,context);
 
       last = total;
 

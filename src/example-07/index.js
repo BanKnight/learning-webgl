@@ -3,8 +3,9 @@ import shader from "./shader"
 
 const mat4 = glMatrix.mat4
 
-export default async function (gl)
+export default async function (context)
 {
+    const gl = context.gl
     const simple_shader = utils.load_shader(gl,shader)
 
     const vao = gl.createVertexArray();
@@ -106,7 +107,7 @@ export default async function (gl)
         gl.uniform1i(simple_shader.uniforms.texture2.location, 1);
 
     }
-    return (dt,total) =>
+    return (dt, context) =>
     {
         //将纹理单元中的纹理切换
         for(let i = 0;i < textures.length;++i)
@@ -124,7 +125,7 @@ export default async function (gl)
         const trans4 = mat4.create()
 
         mat4.translate(trans4,trans4,[0.5,-0.5,0])
-        mat4.rotate(trans4,trans4,total / 1000,[0,0,1])
+        mat4.rotate(trans4,trans4,context.now / 1000,[0,0,1])
 
         gl.uniformMatrix4fv(simple_shader.uniforms.transform.location,false, trans4);
 

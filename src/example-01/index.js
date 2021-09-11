@@ -1,8 +1,9 @@
 import utils from "../utils"
 import shader from "./shader"
 
-export default function (gl)
+export default  function (context)
 {
+    const gl = context.gl
     const simple_shader = utils.load_shader(gl,shader)
 
     const vertices = [

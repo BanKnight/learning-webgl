@@ -1,8 +1,9 @@
 import utils from "../utils"
 import shader from "./shader"
 
-export default function (gl)
+export default async function (context)
 {
+    const gl = context.gl
     const simple_shader = utils.load_shader(gl,shader)
 
     const vao = gl.createVertexArray();
@@ -51,13 +52,13 @@ export default function (gl)
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Int32Array(indices), gl.STATIC_DRAW);    
     }
    
-    return (dt,total) =>
+    return (dt, context) =>
     {
         gl.useProgram(simple_shader.program)
 
         gl.bindVertexArray(vao);
 
-        const greenValue = Math.sin(total /1000) / 2.0 + 0.5;
+        const greenValue = Math.sin(context.now /1000) / 2.0 + 0.5;
 
         gl.uniform4fv(simple_shader.uniforms.ourColor.location, [0, greenValue, 0, 1.0]);
 

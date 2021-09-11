@@ -1,8 +1,9 @@
 import utils from "../utils"
 import shader from "./shader"
 
-export default async function (gl)
+export default async function (context)
 {
+    const gl = context.gl
     const simple_shader = utils.load_shader(gl,shader)
 
     const vao = gl.createVertexArray();

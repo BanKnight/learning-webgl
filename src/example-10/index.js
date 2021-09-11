@@ -3,8 +3,9 @@ import shader from "./shader"
 
 const mat4 = glMatrix.mat4
 
-export default async function (gl, width, height)
+export default async function (context)
 {
+    const gl = context.gl
     const simple_shader = utils.load_shader(gl, shader)
 
     const vao = gl.createVertexArray();
@@ -141,7 +142,7 @@ export default async function (gl, width, height)
     {//投影矩阵
         const projection = mat4.create()        
 
-        mat4.perspective(projection, utils.radians(45.0), width / height, 0.1, 100.0);
+        mat4.perspective(projection, utils.radians(45.0), context.width / context.height, 0.1, 100.0);
     
         gl.uniformMatrix4fv(simple_shader.uniforms.projection.location, false, projection);
     }
@@ -160,8 +161,9 @@ export default async function (gl, width, height)
         [-1.3, 1.0, -1.5],
     ]
 
-    return (dt, total) =>
+    return (dt, context) =>
     {
+
         //将纹理单元中的纹理切换
         for (let i = 0; i < textures.length; ++i)
         {
@@ -179,8 +181,8 @@ export default async function (gl, width, height)
             const view = mat4.create()      //观察矩阵，用于摄像机
 
             const radius = 10.0;
-            const x = Math.sin(total / 1000) * radius;
-            const z = Math.cos(total / 1000) * radius;
+            const x = Math.sin(context.now / 1000) * radius;
+            const z = Math.cos(context.now / 1000) * radius;
 
             //lookAt：out,position,target,up
             mat4.lookAt(view,[x,0,z],[0,0,0],[0,1,0])

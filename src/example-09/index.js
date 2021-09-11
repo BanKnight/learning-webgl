@@ -3,8 +3,9 @@ import shader from "./shader"
 
 const mat4 = glMatrix.mat4
 
-export default async function (gl, width, height)
+export default async function (context)
 {
+    const gl = context.gl
     const simple_shader = utils.load_shader(gl, shader)
 
     const vao = gl.createVertexArray();
@@ -134,7 +135,7 @@ export default async function (gl, width, height)
 
     }
 
-    return (dt,total) =>
+    return (dt, context) =>
     {
         //将纹理单元中的纹理切换
         for (let i = 0; i < textures.length; ++i)
@@ -154,11 +155,11 @@ export default async function (gl, width, height)
         const projection = mat4.create()        //投影矩阵
 
         //绕着X轴旋转，有个疑惑，确定旋转轴后，旋转的方向又是如何确定的
-        mat4.rotate(model, model, total / 1000 * utils.radians(-55), [1, 0, 0])
+        mat4.rotate(model, model, context.now / 1000 * utils.radians(-55), [1, 0, 0])
         mat4.translate(view, view, [0, 0, -3])        //将整个世界的点往Z轴负方向移动，那么世界的东西就露出来
 
         //然后开始做投影计算，表现出3d的特点来
-        mat4.perspective(projection, utils.radians(45.0), width / height, 0.1, 100.0);
+        mat4.perspective(projection, utils.radians(45.0), context.width / context.height, 0.1, 100.0);
 
         gl.uniformMatrix4fv(simple_shader.uniforms.model.location, false, model);
         gl.uniformMatrix4fv(simple_shader.uniforms.view.location, false, view);

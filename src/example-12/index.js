@@ -1,11 +1,13 @@
+import * as KeyCode from 'keycode-js';
 import utils from "../utils"
 import shader from "./shader"
 
 const vec3 = glMatrix.vec3
 const mat4 = glMatrix.mat4
 
-export default async function (gl, width, height)
+export default async function (context)
 {
+    const gl = context.gl
     const simple_shader = utils.load_shader(gl, shader)
 
     const vao = gl.createVertexArray();
@@ -211,9 +213,9 @@ export default async function (gl, width, height)
             last_mouse = null
         }
 
-        if (inputs.keys.ArrowUp)
+        if(inputs.codes[KeyCode.CODE_W])
         {
-            if (inputs.ctrl)
+            if(inputs.shift)
             {
                 vec3.add(camera_position, camera_position, [distance * camera_front[0], distance * camera_front[1], distance * camera_front[2]])
             }
@@ -223,9 +225,9 @@ export default async function (gl, width, height)
             }
         }
 
-        if (inputs.keys.ArrowDown)
+        if(inputs.codes[KeyCode.CODE_S])
         {
-            if (inputs.ctrl)
+            if(inputs.shift)
             {
                 vec3.add(camera_position, camera_position, [-distance * camera_front[0], -distance * camera_front[1], -distance * camera_front[2]])
             }
@@ -238,12 +240,12 @@ export default async function (gl, width, height)
         //右向量
         const right = vec3.normalize(vec3.create(), vec3.cross(vec3.create(), camera_front, camera_up))
 
-        if (inputs.keys.ArrowRight)
+        if(inputs.codes[KeyCode.CODE_D])
         {
             vec3.add(camera_position, camera_position, [distance * right[0], distance * right[1], distance * right[2]])
         }
 
-        if (inputs.keys.ArrowLeft)
+        if(inputs.codes[KeyCode.CODE_A])
         {
             vec3.add(camera_position, camera_position, [-distance * right[0], -distance * right[1], -distance * right[2]])
         }
@@ -259,8 +261,11 @@ export default async function (gl, width, height)
         }
     }
 
-    return (dt, total, inputs) =>
+    return (dt, context) =>
     {
+        const width = context.width
+        const height = context.height
+
         //将纹理放到纹理单元中的对应位置,又加上之前设置过了uniform 对应的纹理单元
         for (let i = 0; i < textures.length; ++i)
         {
@@ -270,7 +275,7 @@ export default async function (gl, width, height)
             gl.bindTexture(gl.TEXTURE_2D, texture);
         }
 
-        handle_events(dt, inputs)
+        handle_events(dt, context.inputs)
 
         gl.useProgram(simple_shader.program)
 
