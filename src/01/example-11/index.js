@@ -179,41 +179,27 @@ export default async function (context)
             gl.bindTexture(gl.TEXTURE_2D, texture);
         }
 
-        const distance = speed * dt  / 1000
+        const distance = speed * dt / 1000
 
-        if(inputs.codes[KeyCode.CODE_W])
+        if (inputs.codes[KeyCode.CODE_W])
         {
-            if(inputs.shift)
-            {
-                vec3.add(camera_position, camera_position,[distance * camera_front[0], distance * camera_front[1], distance * camera_front[2]])
-            }
-            else
-            {
-                vec3.add(camera_position, camera_position,[distance * camera_up[0], distance * camera_up[1], distance * camera_up[2]])
-            }
+            vec3.add(camera_position, camera_position, [distance * camera_front[0], distance * camera_front[1], distance * camera_front[2]])
         }
 
-        if(inputs.codes[KeyCode.CODE_S])
+        if (inputs.codes[KeyCode.CODE_S])
         {
-            if(inputs.shift)
-            {
-                vec3.add(camera_position, camera_position, [-distance * camera_front[0], -distance * camera_front[1], -distance * camera_front[2]])
-            }
-            else
-            {
-                vec3.add(camera_position, camera_position, [-distance * camera_up[0], -distance * camera_up[1], -distance * camera_up[2]])
-            }
+            vec3.add(camera_position, camera_position, [-distance * camera_front[0], -distance * camera_front[1], -distance * camera_front[2]])
         }
 
         //右向量
-        const right = vec3.normalize(vec3.create(),vec3.cross(vec3.create(),camera_front,camera_up))
+        const right = vec3.normalize(vec3.create(), vec3.cross(vec3.create(), camera_front, camera_up))
 
-        if(inputs.codes[KeyCode.CODE_D])
+        if (inputs.codes[KeyCode.CODE_D])
         {
-            vec3.add(camera_position, camera_position,[distance * right[0], distance * right[1], distance * right[2]])
+            vec3.add(camera_position, camera_position, [distance * right[0], distance * right[1], distance * right[2]])
         }
 
-        if(inputs.codes[KeyCode.CODE_A])
+        if (inputs.codes[KeyCode.CODE_A])
         {
             vec3.add(camera_position, camera_position, [-distance * right[0], -distance * right[1], -distance * right[2]])
         }
@@ -226,7 +212,7 @@ export default async function (context)
             const view = mat4.create()      //观察矩阵，用于摄像机
 
             //lookAt：out,position,target,up
-            mat4.lookAt(view, camera_position, vec3.add(vec3.create(),camera_position,camera_front),camera_up)
+            mat4.lookAt(view, camera_position, vec3.add(vec3.create(), camera_position, camera_front), camera_up)
 
             gl.uniformMatrix4fv(simple_shader.uniforms.view.location, false, view);
         }

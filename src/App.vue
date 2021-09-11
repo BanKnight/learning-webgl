@@ -15,7 +15,6 @@ export default {
       keys: {},
       codes:{},
       mouses: {},
-      event: null,
       scroll: 0,
     };
 
@@ -29,7 +28,6 @@ export default {
     canvas.addEventListener("keydown", (e) => {
       inputs.keys[e.keyCode] = true;
       inputs.codes[e.code] = true
-      inputs.event = e;
 
       inputs.ctrl = e.ctrlKey;
       inputs.alt = e.altlKey;
@@ -37,10 +35,8 @@ export default {
     });
 
     canvas.addEventListener("keyup", (e) => {
-      inputs.keys[e.keyCode] = false;
+      inputs.keys[e.keyCode] = e;
       inputs.codes[e.code] = false
-
-      inputs.event = e;
 
       inputs.ctrl = e.ctrlKey;
       inputs.alt = e.altlKey;
@@ -48,8 +44,7 @@ export default {
     });
 
     canvas.addEventListener("mousedown", (e) => {
-      inputs.mouses[e.button] = true;
-
+      inputs.mouses[e.button] = e;
       inputs.event = e;
 
       inputs.ctrl = e.ctrlKey;
@@ -126,6 +121,7 @@ export default {
       requestAnimationFrame(draw);
 
       inputs.scroll = 0;
+      inputs.event = null
     }
 
     requestAnimationFrame(draw);
