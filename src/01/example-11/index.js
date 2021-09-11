@@ -1,5 +1,5 @@
 import * as KeyCode from 'keycode-js';
-import utils from "../utils"
+import utils from "../../utils"
 import shader from "./shader"
 
 const vec3 = glMatrix.vec3

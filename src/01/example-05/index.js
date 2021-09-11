@@ -1,4 +1,4 @@
-import utils from "../utils"
+import utils from "../../utils"
 import shader from "./shader"
 
 export default function (context)

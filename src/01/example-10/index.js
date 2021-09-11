@@ -1,4 +1,4 @@
-import utils from "../utils"
+import utils from "../../utils"
 import shader from "./shader"
 
 const mat4 = glMatrix.mat4
@@ -16,12 +16,50 @@ export default async function (context)
 
     {
         const vertices = [
-            // ---- 位置 ---- - 纹理坐标 -
-            0.5, 0.5, 0.0, 1.0, 1.0,   // 右上
-            0.5, -0.5, 0.0, 1.0, 0.0,   // 右下
-            -0.5, -0.5, 0.0, 0.0, 0.0,   // 左下
-            -0.5, 0.5, 0.0, 0.0, 1.0    // 左上
+            -0.5, -0.5, -0.5, 0.0, 0.0,
+            0.5, -0.5, -0.5, 1.0, 0.0,
+            0.5, 0.5, -0.5, 1.0, 1.0,
+            0.5, 0.5, -0.5, 1.0, 1.0,
+            -0.5, 0.5, -0.5, 0.0, 1.0,
+            -0.5, -0.5, -0.5, 0.0, 0.0,
+
+            -0.5, -0.5, 0.5, 0.0, 0.0,
+            0.5, -0.5, 0.5, 1.0, 0.0,
+            0.5, 0.5, 0.5, 1.0, 1.0,
+            0.5, 0.5, 0.5, 1.0, 1.0,
+            -0.5, 0.5, 0.5, 0.0, 1.0,
+            -0.5, -0.5, 0.5, 0.0, 0.0,
+
+            -0.5, 0.5, 0.5, 1.0, 0.0,
+            -0.5, 0.5, -0.5, 1.0, 1.0,
+            -0.5, -0.5, -0.5, 0.0, 1.0,
+            -0.5, -0.5, -0.5, 0.0, 1.0,
+            -0.5, -0.5, 0.5, 0.0, 0.0,
+            -0.5, 0.5, 0.5, 1.0, 0.0,
+
+            0.5, 0.5, 0.5, 1.0, 0.0,
+            0.5, 0.5, -0.5, 1.0, 1.0,
+            0.5, -0.5, -0.5, 0.0, 1.0,
+            0.5, -0.5, -0.5, 0.0, 1.0,
+            0.5, -0.5, 0.5, 0.0, 0.0,
+            0.5, 0.5, 0.5, 1.0, 0.0,
+
+            -0.5, -0.5, -0.5, 0.0, 1.0,
+            0.5, -0.5, -0.5, 1.0, 1.0,
+            0.5, -0.5, 0.5, 1.0, 0.0,
+            0.5, -0.5, 0.5, 1.0, 0.0,
+            -0.5, -0.5, 0.5, 0.0, 0.0,
+            -0.5, -0.5, -0.5, 0.0, 1.0,
+
+            -0.5, 0.5, -0.5, 0.0, 1.0,
+            0.5, 0.5, -0.5, 1.0, 1.0,
+            0.5, 0.5, 0.5, 1.0, 0.0,
+            0.5, 0.5, 0.5, 1.0, 0.0,
+            -0.5, 0.5, 0.5, 0.0, 0.0,
+            -0.5, 0.5, -0.5, 0.0, 1.0
         ]
+
+
 
         gl.bindBuffer(gl.ARRAY_BUFFER, vbo)
 
@@ -99,8 +137,33 @@ export default async function (context)
 
     }
 
-    return () =>
+    gl.useProgram(simple_shader.program)
+
+    {//投影矩阵
+        const projection = mat4.create()        
+
+        mat4.perspective(projection, utils.radians(45.0), context.width / context.height, 0.1, 100.0);
+    
+        gl.uniformMatrix4fv(simple_shader.uniforms.projection.location, false, projection);
+    }
+
+    //每个立方体的位置
+    const cubePositions = [
+        [0.0, 0.0, 0.0],
+        [2.0, 5.0, -15.0],
+        [-1.5, -2.2, -2.5],
+        [-3.8, -2.0, -12.3],
+        [2.4, -0.4, -3.5],
+        [-1.7, 3.0, -7.5],
+        [1.3, -2.0, -2.5],
+        [1.5, 2.0, -2.5],
+        [1.5, 0.2, -1.5],
+        [-1.3, 1.0, -1.5],
+    ]
+
+    return (dt, context) =>
     {
+
         //将纹理单元中的纹理切换
         for (let i = 0; i < textures.length; ++i)
         {
@@ -114,24 +177,32 @@ export default async function (context)
 
         gl.bindVertexArray(vao);
 
-        const model = mat4.create()     //局部空间
-        const view = mat4.create()      //观察矩阵，用于摄像机
-        const projection = mat4.create()        //投影矩阵
+        {   // 摄像机围绕
+            const view = mat4.create()      //观察矩阵，用于摄像机
 
-        //绕着X轴旋转，有个疑惑，确定旋转轴后，旋转的方向又是如何确定的
-        mat4.rotate(model, model, utils.radians(-55), [1, 0, 0])        
-        mat4.translate(view, view, [0,0,-3])        //将整个世界的点往Z轴负方向移动，那么世界的东西就露出来
+            const radius = 10.0;
+            const x = Math.sin(context.now / 1000) * radius;
+            const z = Math.cos(context.now / 1000) * radius;
 
-        //然后开始做投影计算，表现出3d的特点来
-        mat4.perspective(projection,utils.radians(45.0), context.width / context.height, 0.1, 100.0);
+            //lookAt：out,position,target,up
+            mat4.lookAt(view,[x,0,z],[0,0,0],[0,1,0])
 
-        gl.uniformMatrix4fv(simple_shader.uniforms.model.location, false, model);
-        gl.uniformMatrix4fv(simple_shader.uniforms.view.location, false, view);
+            gl.uniformMatrix4fv(simple_shader.uniforms.view.location, false, view);
+        }
 
-        //投影矩阵在不变的情况下，可以优化写在帧循环外面，减少设置
-        //通过教程中上面这句话可以理解，矩阵中的全局变量果然不会丢失，可以利用这点做优化
-        gl.uniformMatrix4fv(simple_shader.uniforms.projection.location, false, projection);
+        for (let i = 0; i < cubePositions.length; ++i)
+        {
+            const position = cubePositions[i]
 
-        gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_INT, 0);
+            const model = mat4.create()     //局部空间
+
+            // 立方体 移动 + 旋转不同方向
+            mat4.translate(model, model, position)
+            mat4.rotate(model, model, utils.radians(22 * i), [1, 0.3, 0.5])
+
+            gl.uniformMatrix4fv(simple_shader.uniforms.model.location, false, model);
+
+            gl.drawArrays(gl.TRIANGLES, 0, 36);
+        }
     }
 }
