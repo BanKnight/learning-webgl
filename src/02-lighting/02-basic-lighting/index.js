@@ -33,7 +33,7 @@ export default async function (context)
 
     const cubes = []
 
-    for (let i = 0; i < 10; ++i)
+    for (let i = 0; i < 5; ++i)
     {
         const cube = new Cube(context)
 
@@ -51,7 +51,7 @@ export default async function (context)
         const scale = utils.random(0.5, 1)
 
         cube.scale.x = scale
-        cube.scale.y = scale
+        cube.scale.y = utils.random(0.5, 1)
         cube.scale.z = scale
 
         await cube.setup()
