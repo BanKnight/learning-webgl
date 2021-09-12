@@ -2,6 +2,10 @@
 
 用webgl 实现 learning-opengl上的内容
 
+## 效果图
+
+![02-lighting/02-basic-lighting](./example.png)
+
 ## 运行例子
 
 修改 App.vue 为对应例子，然后查看效果即可
