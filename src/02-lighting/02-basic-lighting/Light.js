@@ -2,11 +2,12 @@
 import shaders from "./shaders";
 import Element from "./Element"
 
-export default class Cube extends Element
+export default class Light extends Element
 {
     constructor(context)
     {
         super(context)
+
         this.color = { r: 255, g: 255, b: 255 }
     }
 
@@ -14,7 +15,7 @@ export default class Cube extends Element
     {
         const gl = this.context.gl
 
-        this.shader = shaders.get("cube")
+        this.shader = shaders.get("light")
 
         this.vao = gl.createVertexArray();
 

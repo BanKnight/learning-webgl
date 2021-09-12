@@ -48,9 +48,11 @@ export default async function (context)
         cube.position.y = utils.random(-4, 4)
         cube.position.z = utils.random(-4, 4)
 
-        cube.scale.x = utils.random(0.5, 1)
-        cube.scale.y = utils.random(0.5, 1)
-        cube.scale.z = utils.random(0.5, 1)
+        const scale = utils.random(0.5, 1)
+
+        cube.scale.x = scale
+        cube.scale.y = scale
+        cube.scale.z = scale
 
         await cube.setup()
 

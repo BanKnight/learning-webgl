@@ -108,3 +108,10 @@ function loadShader(gl, type, source)
 
     return shader;
 }
+
+exports.random =  function(min,max)
+{
+    const interval = max - min
+
+    return min + Math.random()*interval
+}

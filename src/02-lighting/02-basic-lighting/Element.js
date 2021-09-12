@@ -62,7 +62,12 @@ export default class Element
             const projection = this.camera.projection
 
             gl.uniformMatrix4fv(this.shader.uniforms.projection.location, false, projection);
+        }
+        if(this.shader.uniforms.viewPos)
+        {
+            const position = this.camera.position
 
+            gl.uniform3fv(this.shader.uniforms.viewPos.location, [position.x,position.y,position.z]);
         }
     }
     update_light(gl)
@@ -72,10 +77,17 @@ export default class Element
             return
         }
 
-        const color = this.light.color
+        {
+            const color = this.light.color
 
-        gl.uniform3fv(this.shader.uniforms.light.location, [color.r / 255, color.g / 255, color.b / 255]);
+            gl.uniform3fv(this.shader.uniforms.light.location, [color.r / 255, color.g / 255, color.b / 255]);
+        }
 
+        {
+            const position = this.light.position
+
+            gl.uniform3fv(this.shader.uniforms.lightPos.location, [position.x,position.y,position.z]);
+        }
     }
 
 

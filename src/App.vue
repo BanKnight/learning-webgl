@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import example from "./01/example-12";
+import example from "./02-lighting/02-basic-lighting";
 
 export default {
   name: "App",
@@ -13,7 +13,7 @@ export default {
     const canvas = this.$refs.canvas;
     let inputs = {
       keys: {},
-      codes:{},
+      codes: {},
       mouses: {},
       scroll: 0,
     };
@@ -27,7 +27,7 @@ export default {
 
     canvas.addEventListener("keydown", (e) => {
       inputs.keys[e.keyCode] = true;
-      inputs.codes[e.code] = true
+      inputs.codes[e.code] = true;
 
       inputs.ctrl = e.ctrlKey;
       inputs.alt = e.altlKey;
@@ -36,7 +36,7 @@ export default {
 
     canvas.addEventListener("keyup", (e) => {
       inputs.keys[e.keyCode] = e;
-      inputs.codes[e.code] = false
+      inputs.codes[e.code] = false;
 
       inputs.ctrl = e.ctrlKey;
       inputs.alt = e.altlKey;
@@ -78,24 +78,28 @@ export default {
     const context = {
       canvas,
       gl,
-      now:performance.now(),
-      width:0,
-      height:0,
-      inputs
-    }
+      now: performance.now(),
+      width: 0,
+      height: 0,
+      inputs,
+      color:{r:0.2, g:0.3, b:0.3, a:1.0},
+    };
 
     function full_screen() {
-      context.width = document.documentElement.clientWidth
-      context.height = document.documentElement.clientHeight-1
-
-      gl.viewport(0, 0, context.width, context.height);
+      context.width = document.documentElement.clientWidth;
+      context.height = document.documentElement.clientHeight;
 
       canvas.width = context.width
       canvas.height = context.height
 
+      canvas.style.width = context.width + "px";
+      canvas.style.height = context.height + "px";
+
+      gl.viewport(0, 0, context.width, context.height);
+
     }
 
-    window.onresize = full_screen
+    window.onresize = full_screen;
 
     canvas.focus();
 
@@ -109,19 +113,20 @@ export default {
 
     function draw(total) {
 
-      gl.clearColor(0.2, 0.3, 0.3, 1.0);
+
+      gl.clearColor(context.color.r,context.color.g,context.color.b, context.color.a);
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-      context.now = total
+      context.now = total;
 
-      draw_example(total - last,context);
+      draw_example(total - last, context);
 
       last = total;
 
       requestAnimationFrame(draw);
 
       inputs.scroll = 0;
-      inputs.event = null
+      inputs.event = null;
     }
 
     requestAnimationFrame(draw);
@@ -134,7 +139,7 @@ export default {
   margin: 0;
   padding: 0;
   outline-width: 0;
-  border:0;
+  border: 0;
 }
 html,
 body {
@@ -147,7 +152,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-    height: 100%;
+  height: 100%;
   width: 100%;
 }
 </style>

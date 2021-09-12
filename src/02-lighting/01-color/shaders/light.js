@@ -20,7 +20,7 @@ export default {
 
     void main()
     {
-        FragColor = vec4(light * color, 1.0);
+        FragColor = vec4(color,1.0);
     }
     `
 }

@@ -24,6 +24,8 @@ import example from "./01/example-12";
   + example-11：演示使用键盘控制摄像头移动
   + example-12：演示使用鼠标控制摄像头旋转
 + 02-lighting
+  + 01-color: 演示通过修改光源颜色表现光的计算
+  + 02-basic-lighting: 演示冯氏光照模型
 
 ## 使用到的库
 
