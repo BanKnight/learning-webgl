@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import example from "./02-lighting/03-materials";
+import example from "./02-lighting/04-lighting-maps";
 
 export default {
   name: "App",

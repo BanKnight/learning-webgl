@@ -31,6 +31,7 @@ import example from "./01/example-12";
   + 01-color: 演示通过修改光源颜色表现光的计算
   + 02-basic-lighting: 演示冯氏光照模型
   + 03-materials: 演示材质系统
+  + 04-lighting-maps：演示光照贴图
   
 ## 使用到的库
 
