@@ -130,8 +130,8 @@ export default class Light extends Element
         this.diffuse[1] = g  * diffuse_factor
         this.diffuse[2] = b  * diffuse_factor
 
-        this.ambient[0] = this.diffuse[0]  * ambient_factor
-        this.ambient[1] = this.diffuse[1]  * ambient_factor
-        this.ambient[2] = this.diffuse[2]  * ambient_factor
+        this.ambient[0] = r  * ambient_factor
+        this.ambient[1] = r  * ambient_factor
+        this.ambient[2] = r  * ambient_factor
     }
 }

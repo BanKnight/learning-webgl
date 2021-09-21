@@ -37,6 +37,7 @@ export default {
     struct Material {
         sampler2D diffuse;  //漫反射,定义了在漫反射光照下物体的颜色。（和环境光照一样）
         sampler2D specular;      //镜面光照,镜面光照对物体的颜色影响（或者甚至可能反射一个物体特定的镜面高光颜色）
+        sampler2D emission;
         float shininess;    //反光度,影响镜面高光的散射/半径
     }; 
 
@@ -70,7 +71,10 @@ export default {
         float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
         vec3 specular = light.specular * spec * texture(material.specular, TexCoords).rgb;  
 
-        vec3 result = ambient + diffuse + specular;
+        vec3 emission = texture(material.emission, TexCoords).rgb;
+
+        vec3 result = ambient + diffuse + specular + emission;
+
         FragColor = vec4(result, 1.0);
     }
     `

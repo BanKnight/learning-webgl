@@ -31,6 +31,17 @@ exports.load_shader = function (gl, sources)
     return shader
 }
 
+exports.load_image = function (url)
+{
+    return new Promise((resolve) =>
+    {
+        const img = new Image()
+
+        img.src = url
+        img.onload = () =>resolve(img)
+    })
+}
+
 exports.load_images = function (urls)
 {
     return new Promise((resolve) =>
@@ -55,7 +66,7 @@ exports.load_images = function (urls)
     })
 }
 
-exports.radians = function(angle)
+exports.radians = function (angle)
 {
     return angle / 180 * Math.PI
 }
@@ -109,9 +120,9 @@ function loadShader(gl, type, source)
     return shader;
 }
 
-exports.random =  function(min,max)
+exports.random = function (min, max)
 {
     const interval = max - min
 
-    return min + Math.random()*interval
+    return min + Math.random() * interval
 }

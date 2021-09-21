@@ -13,6 +13,7 @@ export default class Cube extends Element
         this.material = {
             diffuse: null,       //漫反射,定义了在漫反射光照下物体的颜色。（和环境光照一样）
             specular: null,      //镜面光照,镜面光照对物体的颜色影响（或者甚至可能反射一个物体特定的镜面高光颜色）
+            emission:null,       //一个储存了每个片段的发光值(Emission Value)的贴图
             shininess: 0,    //反光度,影响镜面高光的散射/半径
         }
     }
@@ -22,7 +23,6 @@ export default class Cube extends Element
         const gl = this.context.gl
 
         this.shader = shaders.get("cube")
-
 
         this.setup_vertices(gl)
 
@@ -127,19 +127,26 @@ export default class Cube extends Element
         );
     }
 
-  
-
     async setup_texture(gl)
     {
         const res = this.context.res
 
-        this.material.diffuse = await res.load_image("container2.png")
-        this.material.specular = await res.load_image("container2_specular.png")
+        const textures = await res.load_images([
+            "container2.png",
+            "container2_specular.png",
+            "matrix.jpg"
+        ])
+
+        this.material.diffuse = textures[0]
+        this.material.specular = textures[1]
+        this.material.emission = textures[2]
+
+        gl.useProgram(this.shader.program)
 
         //映射到纹理单元的index
         gl.uniform1i(this.shader.uniforms["material.diffuse"].location, 0);
         gl.uniform1i(this.shader.uniforms["material.specular"].location, 1);
-
+        gl.uniform1i(this.shader.uniforms["material.emission"].location, 2);
     }
 
     draw()
@@ -152,6 +159,9 @@ export default class Cube extends Element
 
             gl.activeTexture(gl.TEXTURE1)
             gl.bindTexture(gl.TEXTURE_2D, this.material.specular);
+
+            gl.activeTexture(gl.TEXTURE2)
+            gl.bindTexture(gl.TEXTURE_2D, this.material.emission);
         }
 
         {

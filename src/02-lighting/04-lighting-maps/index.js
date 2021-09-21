@@ -38,13 +38,19 @@ export default async function (context)
         light.scale.y = 0.2
         light.scale.z = 0.2
 
-        light.set_color(1,1,1)
+        light.ambient[0] =  0.2
+        light.ambient[1] = 0.2
+        light.ambient[2] = 0.2
+
+        light.diffuse[0] = 0.5
+        light.diffuse[1] = 0.5
+        light.diffuse[2] = 0.5
 
         light.specular[0] = 1.0
         light.specular[1] = 1.0
         light.specular[2] = 1.0
 
-        light.setup()
+        await light.setup()
     }
 
     const cubes = []
@@ -68,7 +74,7 @@ export default async function (context)
 
         // cube.set_color(Math.random(), Math.random(), Math.random())
 
-        cube.material.shininess = 32.0
+        cube.material.shininess = 64.0
 
         await cube.setup()
 
