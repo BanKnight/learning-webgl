@@ -32,6 +32,7 @@ import example from "./01/example-12";
   + 02-basic-lighting: 演示冯氏光照模型
   + 03-materials: 演示材质系统
   + 04-lighting-maps：演示光照贴图
+  + 05-directional：演示平行光
   
 ## 使用到的库
 

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import example from "./02-lighting/04-lighting-maps";
+import example from "./02-lighting/05-directional";
 
 export default {
   name: "App",
