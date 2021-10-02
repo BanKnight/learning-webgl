@@ -33,7 +33,8 @@ import example from "./01/example-12";
   + 03-materials: 演示材质系统
   + 04-lighting-maps：演示光照贴图
   + 05-directional：演示平行光
-  
+  + 06-point：演示点光源
+
 ## 使用到的库
 
 + [glMatrix 矩阵运算](https://github.com/toji/gl-matrix)
