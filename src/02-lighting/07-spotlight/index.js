@@ -9,6 +9,8 @@ import Light from "./Light";
 
 import utils from "../../utils"
 
+const vec3 = glMatrix.vec3
+
 export default async function (context)
 {
     let gl = context.gl
@@ -49,6 +51,9 @@ export default async function (context)
         light.specular[0] = 1.0
         light.specular[1] = 1.0
         light.specular[2] = 1.0
+
+        light.cutOff = Math.cos(utils.radians(12.5))
+        light.outerCutOff = Math.cos(utils.radians(17.5))
 
         light.constant = 1
         light.linear = 0.09
@@ -160,6 +165,10 @@ export default async function (context)
         update_event(dt)
 
         camera.update(dt)
+
+        //将聚光灯设置成摄像头发出
+        vec3.copy(light.direction,camera.front)
+        vec3.copy(light.position,camera.position)
 
         light.update(dt)
 

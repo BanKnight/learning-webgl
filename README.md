@@ -34,6 +34,7 @@ import example from "./01/example-12";
   + 04-lighting-maps：演示光照贴图
   + 05-directional：演示平行光
   + 06-point：演示点光源
+  + 07-spotlight：演示聚光灯
 
 ## 使用到的库
 
