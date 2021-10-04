@@ -35,7 +35,7 @@ import example from "./01/example-12";
   + 05-directional：演示平行光
   + 06-point：演示点光源
   + 07-spotlight：演示聚光灯
-
+  + 08-multiple:多光源演示
 ## 使用到的库
 
 + [glMatrix 矩阵运算](https://github.com/toji/gl-matrix)
