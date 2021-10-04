@@ -85,12 +85,12 @@ export default class Element
         {
             const position = this.light.position
 
-            gl.uniform3fv(this.shader.uniforms["light.position"].location, position);
+            gl.uniform3fv(this.shader.uniforms.light.position.location, position);
         }
         {
-            gl.uniform3fv(this.shader.uniforms["light.ambient"].location, this.light.ambient);
-            gl.uniform3fv(this.shader.uniforms["light.diffuse"].location, this.light.diffuse);
-            gl.uniform3fv(this.shader.uniforms["light.specular"].location, this.light.specular);
+            gl.uniform3fv(this.shader.uniforms.light.ambient.location, this.light.ambient);
+            gl.uniform3fv(this.shader.uniforms.light.diffuse.location, this.light.diffuse);
+            gl.uniform3fv(this.shader.uniforms.light.specular.location, this.light.specular);
         }
     }
 

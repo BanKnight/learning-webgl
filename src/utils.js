@@ -10,8 +10,24 @@ exports.load_shader = function (gl, sources)
     for (let i = 0; i < count; ++i)
     {
         const info = gl.getActiveAttrib(shader.program, i)
+        const array = info.name.split(".")
 
-        shader.attributes[info.name] = {
+        const last_name = array.pop()
+
+        let parent = shader.attributes
+
+        for(const one of array)
+        {
+            let exists = parent[one]
+            if(exists == null)
+            {
+                exists = {}
+                parent[one] = exists
+            }
+            parent = exists
+        }
+
+        parent[last_name] = {
             ...info,
             location: gl.getAttribLocation(shader.program, info.name)
         }
@@ -22,7 +38,59 @@ exports.load_shader = function (gl, sources)
     {
         const info = gl.getActiveUniform(shader.program, i)
 
-        shader.uniforms[info.name] = {
+        const array = info.name.split(".")
+
+        const last_name = array.pop()
+
+        let parent = shader.uniforms
+
+        //example:pointLights[0].position
+        for(const one of array)
+        {
+            const left = one.indexOf("[")
+            const right = one.indexOf("]")
+
+            let name = one
+            let is_array = false
+
+            if(right > left)    //array
+            {
+                name = one.substring(0,left)
+                is_array = true
+            }
+
+            let exists = parent[name]
+            if(exists == null)
+            {
+                if(is_array)
+                {
+                    exists = new Array()
+                }
+                else
+                {
+                    exists = {}
+                }
+                parent[name] = exists
+            }
+
+            parent = exists
+
+            if(is_array)
+            {
+                let index = Number(one.substring(left + 1,right))
+
+                exists = parent[index]
+
+                if(exists == null)
+                {
+                    exists = {}
+                    parent[index] = exists
+                }
+                parent = exists
+            }
+        }
+
+        parent[last_name] = {
             ...info,
             location: gl.getUniformLocation(shader.program, info.name)
         }

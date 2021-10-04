@@ -1,6 +1,6 @@
 # learning-webgl
 
-用webgl 实现 learning-opengl上的内容
+用webgl 实现 [learning-opengl](https://learnopengl-cn.github.io)上的内容
 
 ## 效果图
 
@@ -42,7 +42,11 @@ import example from "./01/example-12";
 
 ## 项目准备
 
-本项目利用vue的工程配置，因此首先安装vue-cli
+### vscode 的配置
++ 
++ [例子参考](https://juejin.cn/post/6992023855384494116)
+
+### 本项目利用vue的工程配置，因此首先安装vue-cli
 
 + 安装 vue-cli
 
@@ -77,3 +81,7 @@ npm run lint
 ### Customize configuration
 
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## 参考
++ [vue.config.js 的完整配置（超详细）！](https://juejin.cn/post/6886698055685373965)
++ [WebGL入门(三)：使用VUE3编写WebGL程序](https://juejin.cn/post/6992023855384494116)

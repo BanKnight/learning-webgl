@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import example from "./02-lighting/07-spotlight";
+import example from "./02-lighting/08-multiple";
 
 export default {
   name: "App",

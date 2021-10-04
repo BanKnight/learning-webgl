@@ -143,8 +143,8 @@ export default class Cube extends Element
         gl.useProgram(this.shader.program)
 
         //映射到纹理单元的index
-        gl.uniform1i(this.shader.uniforms["material.diffuse"].location, 0);
-        gl.uniform1i(this.shader.uniforms["material.specular"].location, 1);
+        gl.uniform1i(this.shader.uniforms.material.diffuse.location, 0);
+        gl.uniform1i(this.shader.uniforms.material.specular.location, 1);
     }
 
     draw()
@@ -160,7 +160,7 @@ export default class Cube extends Element
         }
 
         {
-            gl.uniform1f(this.shader.uniforms["material.shininess"].location, this.material.shininess);
+            gl.uniform1f(this.shader.uniforms.material.shininess.location, this.material.shininess);
         }
 
         gl.bindVertexArray(this.vao);

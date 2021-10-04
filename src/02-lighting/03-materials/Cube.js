@@ -134,10 +134,10 @@ export default class Cube extends Element
         const gl = this.context.gl
 
         {
-            gl.uniform3fv(this.shader.uniforms["material.ambient"].location, this.material.ambient);
-            gl.uniform3fv(this.shader.uniforms["material.diffuse"].location, this.material.diffuse);
-            gl.uniform3fv(this.shader.uniforms["material.specular"].location, this.material.specular);
-            gl.uniform1f(this.shader.uniforms["material.shininess"].location, this.material.shininess);
+            gl.uniform3fv(this.shader.uniforms.material.ambient.location, this.material.ambient);
+            gl.uniform3fv(this.shader.uniforms.material.diffuse.location, this.material.diffuse);
+            gl.uniform3fv(this.shader.uniforms.material.specular.location, this.material.specular);
+            gl.uniform1f(this.shader.uniforms.material.shininess.location, this.material.shininess);
         }
 
         gl.bindVertexArray(this.vao);

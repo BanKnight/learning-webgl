@@ -99,24 +99,24 @@ export default class Element
         }
 
         {
-            gl.uniform3fv(this.shader.uniforms["light.position"].location, this.light.position);
+            gl.uniform3fv(this.shader.uniforms.light.position.location, this.light.position);
 
-            gl.uniform3fv(this.shader.uniforms["light.direction"].location, this.light.direction);
-            gl.uniform3fv(this.shader.uniforms["light.ambient"].location, this.light.ambient);
-            gl.uniform3fv(this.shader.uniforms["light.diffuse"].location, this.light.diffuse);
-            gl.uniform3fv(this.shader.uniforms["light.specular"].location, this.light.specular);
+            gl.uniform3fv(this.shader.uniforms.light.direction.location, this.light.direction);
+            gl.uniform3fv(this.shader.uniforms.light.ambient.location, this.light.ambient);
+            gl.uniform3fv(this.shader.uniforms.light.diffuse.location, this.light.diffuse);
+            gl.uniform3fv(this.shader.uniforms.light.specular.location, this.light.specular);
         }
 
         {
-            gl.uniform1f(this.shader.uniforms["light.cutOff"].location, this.light.cutOff);
-            gl.uniform1f(this.shader.uniforms["light.outerCutOff"].location, this.light.outerCutOff);
+            gl.uniform1f(this.shader.uniforms.light.cutOff.location, this.light.cutOff);
+            gl.uniform1f(this.shader.uniforms.light.outerCutOff.location, this.light.outerCutOff);
 
         }
 
         {
-            gl.uniform1f(this.shader.uniforms["light.constant"].location, this.light.constant);
-            gl.uniform1f(this.shader.uniforms["light.linear"].location, this.light.linear);
-            gl.uniform1f(this.shader.uniforms["light.quadratic"].location, this.light.quadratic);
+            gl.uniform1f(this.shader.uniforms.light.constant.location, this.light.constant);
+            gl.uniform1f(this.shader.uniforms.light.linear.location, this.light.linear);
+            gl.uniform1f(this.shader.uniforms.light.quadratic.location, this.light.quadratic);
         }
     }
 

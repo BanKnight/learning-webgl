@@ -101,12 +101,12 @@ export default class Element
         {
             const direction = this.light.direction
 
-            gl.uniform3fv(this.shader.uniforms["light.direction"].location, direction);
+            gl.uniform3fv(this.shader.uniforms.light.direction.location, direction);
         }
         {
-            gl.uniform3fv(this.shader.uniforms["light.ambient"].location, this.light.ambient);
-            gl.uniform3fv(this.shader.uniforms["light.diffuse"].location, this.light.diffuse);
-            gl.uniform3fv(this.shader.uniforms["light.specular"].location, this.light.specular);
+            gl.uniform3fv(this.shader.uniforms.light.ambient.location, this.light.ambient);
+            gl.uniform3fv(this.shader.uniforms.light.diffuse.location, this.light.diffuse);
+            gl.uniform3fv(this.shader.uniforms.light.specular.location, this.light.specular);
         }
     }
 
