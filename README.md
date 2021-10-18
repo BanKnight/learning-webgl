@@ -85,3 +85,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ## 参考
 + [vue.config.js 的完整配置（超详细）！](https://juejin.cn/post/6886698055685373965)
 + [WebGL入门(三)：使用VUE3编写WebGL程序](https://juejin.cn/post/6992023855384494116)
++ [clinthidinger/assimp.js](https://github.com/clinthidinger/assimp.js)
++ [Wavefront .obj file](https://en.wikipedia.org/wiki/Wavefront_.obj_file)

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import example from "./02-lighting/08-multiple";
+import example from "./03-model/01-mesh";
 
 export default {
   name: "App",

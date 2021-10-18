@@ -46,8 +46,8 @@ export default async function (context)
     {
         const point = new PointLight(context)
 
-        point.set_position(utils.random(-radius / 2, radius / 2),
-            utils.random(-radius / 2, radius / 2),
+        point.set_position(utils.random(-radius * 1.5, radius * 1.5),
+            utils.random(-radius * 1.5, radius * 1.5),
             utils.random(-radius / 2, radius / 2))
 
         point.set_scale(0.2, 0.2, 0.2)
