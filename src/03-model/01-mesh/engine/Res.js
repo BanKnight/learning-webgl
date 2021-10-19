@@ -67,12 +67,13 @@ export default class Res
 
     load_image(url)
     {
-        return new Promise((resolve) =>
+        return new Promise((resolve,reject) =>
         {
             const img = new Image()
     
             img.src = url
-            img.onload = () =>resolve(img)
+            img.onload = ()=>resolve(img)
+            img.onerror = reject
         })
     }
 }

@@ -5,16 +5,16 @@ import Vertex from "./Vertex"
 
 const delimiter_pattern = /\s+/;
 
-function check_vector(container,len)
+function check_vector(container, len)
 {
-    if(container.length != len)
+    if (container.length != len)
     {
         throw new Error("length not valid")
     }
 
-    for(let i = 0;i < len;++i)
+    for (let i = 0; i < len; ++i)
     {
-        if(container[i] == null)
+        if (container[i] == null)
         {
             throw new Error("item not right")
         }
@@ -96,32 +96,39 @@ export default class Model
                         child = {
                             name: value,
                             faces: [],
-                            smooth: false
+                            indices: 0,
+                            has_normals: false,
+                            smooth: false,
+                            meshes: []
                         }
 
                         obj.children.push(child)
-
                     }
                     break
                 case "v":
                     {
-                        const ss = value.split(delimiter_pattern, 3);
+                        const ss = value.split(delimiter_pattern, 6);
                         const array = ss.map(parseFloat)
 
-                        check_vector(array,3)
+                        if (array.length == 3)
+                        {
+                            obj.vertices.push(array)
+                        }
+                        else if (array.length == 4)
+                        {
+                            const w = array[3]
 
-                        obj.vertices.push(array)
-                    }
-                    break
-                case "vt":
-                    {
-                        const ss = value.split(delimiter_pattern, 3);
+                            obj.vertices.push([array[0] / 2, array[1] / w, array[2] / w])
 
-                        const array = ss.map(parseFloat)
+                        }
+                        else
+                        {
+                            const second = array.splice(3, 3)
 
-                        check_vector(array,2)
+                            obj.vertices.push(array)
+                            obj.colors.push(second)
+                        }
 
-                        obj.uvs.push(array)
                     }
                     break
                 case "vn":
@@ -130,28 +137,73 @@ export default class Model
 
                         const array = ss.map(parseFloat)
 
-                        check_vector(array,3)
+                        check_vector(array, 3)
 
                         obj.normals.push(array)
+                    }
+                    break
+                case "vt":
+                    {
+                        const ss = value.split(delimiter_pattern, 2);
+
+                        const array = ss.map(parseFloat)
+
+                        // if (array.length == 2) {
+                        //     array.push(0)
+                        // }
+
+                        obj.uvs.push(array)
                     }
                     break
                 case "f":
                     {
                         const ss = value.split(delimiter_pattern, 3);
 
+                        const face = { positions: [], coords: [], normals: [], material: child.material, type: key }
+
                         for (const one of ss)
                         {
-                            const face = one.split("/").map(parseFloat)
 
-                            check_vector(face,3)
+                            const array = one.split("/").map((item) => parseInt(item, 10))
 
-                            child.faces.push(face)
+                            if (array[0])
+                            {
+                                face.positions.push(array[0] > 0 ? array[0] - 1 : obj.vertices.length + array[0])
+                            }
+
+                            if (array[1])
+                            {
+                                if (obj.uvs.length > 0)
+                                {
+                                    face.coords.push(array[1] > 0 ? array[1] - 1 : obj.uvs.length + array[1])
+                                }
+                                else if (obj.normals.length > 0)
+                                {
+                                    face.normals.push(array[2] > 0 ? array[2] - 1 : obj.normals.length + array[2])
+                                }
+                            }
+                            if (array[2])
+                            {
+                                face.normals.push(array[2] > 0 ? array[2] - 1 : obj.normals.length + array[2])
+                            }
                         }
+
+                        if (face.positions.length == 0)
+                        {
+                            continue
+                        }
+
+                        child.faces.push(face)
+
+                        child.indices += face.positions.length
+                        child.has_normals = child.has_normals || face.normals.length > 0
+
                     }
                     break
                 case "usemtl":
                     {
                         child.material = value
+                        obj.curr_material = value
                     }
                     break
                 case "s":
@@ -178,7 +230,7 @@ export default class Model
 
             for (const face of child.faces)
             {
-                this.add_vertx(obj, mesh, face)
+                this.add_face(obj, mesh, face)
             }
 
             mesh.material = mtl.materials[child.material]
@@ -189,21 +241,43 @@ export default class Model
         }
     }
 
-    add_vertx(obj, mesh, face)
+    add_face(obj, mesh, face)
     {
 
-        const position_index = face[0] > 0 ? face[0] - 1 : obj.vertices.length + face[0]
-        const coords_index = face[1] > 0 ? face[1] - 1 : obj.uvs.length + face[1]
-        const normal_index = face[2] > 0 ? face[2] - 1 : obj.normals.length + face[2]
 
-        const vertex = new Vertex()
+        for (let i = 0, len = face.positions.length; i < len; ++i)
+        {
+            const position = face.positions[i]
+            const vertex = new Vertex()
 
-        vertex.position.set(obj.vertices[position_index])
-        vertex.coords.set(obj.uvs[coords_index])
-        vertex.normals.set(obj.normals[normal_index])
+            vertex.position.set(obj.vertices[position])
 
-        mesh.vertices.push(vertex)
-        mesh.indices.push(mesh.indices.length)
+            if (face.normals.length > 0 && i < face.normals.length)
+            {
+                vertex.normals.set(obj.normals[face.normals[i]])
+            }
+
+            // if(position < obj.colors.length)
+            // {
+            //     const color = obj.colors[vertex];
+
+            //     vertex.colors.set(color)       //vec3 / vec4
+            // }
+
+            if (i < face.coords.length)
+            {
+                const index = face.coords[i]
+
+                vertex.coords.set(obj.uvs[index])
+            }
+
+            if (i != len - 1 || face.type != "l")
+            {
+                mesh.indices.push(mesh.indices.length)
+            }
+
+            mesh.vertices.push(vertex)
+        }
     }
 
     async load_material(mesh, directory)
@@ -218,6 +292,11 @@ export default class Model
 
         for (const type in material.maps)
         {
+            if (type != "diffuse")
+            {
+                continue
+            }
+
             const url = material.maps[type]
 
             urls.push(`${directory}/${url}`)
